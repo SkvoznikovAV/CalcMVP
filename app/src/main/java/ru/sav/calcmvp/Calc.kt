@@ -1,5 +1,5 @@
 package ru.sav.calcmvp
-
+//test
 class Calc() {
     var number1: Double = 0.0
         set(value) {
