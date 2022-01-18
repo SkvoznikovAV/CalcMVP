@@ -44,17 +44,8 @@ class CalcPresenter(private val calcView: CalcView, private var calc: Calc) {
         }
     }
 
-    private fun forceCalculate(input: String): Boolean {
-        if (calc.operation == Operations.NOTHING) return false
-
-        val strings = input.split(calc.getStringOperation())
-        if (strings[1].isEmpty()) return false
-
-        return calculate(input)
-    }
-    
     private fun operationPressed(input: String, operation: Operations){
-        forceCalculate(input)
+        calculate(input)
         calc.operation = operation
         showCurrentInput()
     }
