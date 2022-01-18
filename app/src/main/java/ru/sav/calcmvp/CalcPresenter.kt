@@ -20,7 +20,8 @@ class CalcPresenter(private val calcView: CalcView, private var calc: Calc) {
 
     fun delPressed(){
         if (calc.currentInput.isNotEmpty()) {
-            if ((calc.currentInput.last()=='+')||(calc.currentInput.last()=='-')||(calc.currentInput.last()=='*')||(calc.currentInput.last()=='/')) {
+            val lastChar=calc.currentInput.last()
+            if ((lastChar=='+')||(lastChar=='-')||(lastChar=='*')||(lastChar=='/')) {
                 calc.operation=Operations.NOTHING
             } else{
                 calc.currentInput = calc.currentInput.substring(0,calc.currentInput.length-1)
@@ -43,17 +44,6 @@ class CalcPresenter(private val calcView: CalcView, private var calc: Calc) {
         }
     }
 
-    private fun getNumber1FromInput(input: String): Double{
-        val number1:Double
-        if ((input.last()=='+')||(input.last()=='-')||(input.last()=='*')||(input.last()=='/')) {
-            number1=calc.number1
-        } else {
-            number1=input.toDouble()
-        }
-
-        return number1
-    }
-
     private fun forceCalculate(input: String): Boolean {
         if (calc.operation == Operations.NOTHING) return false
 
@@ -64,13 +54,8 @@ class CalcPresenter(private val calcView: CalcView, private var calc: Calc) {
     }
     
     private fun operationPressed(input: String, operation: Operations){
-        if (forceCalculate(input)) {
-            calc.operation = operation
-        } else {
-            calc.number1=getNumber1FromInput(input)
-            calc.operation = operation
-        }
-
+        forceCalculate(input)
+        calc.operation = operation
         showCurrentInput()
     }
 
@@ -94,13 +79,22 @@ class CalcPresenter(private val calcView: CalcView, private var calc: Calc) {
         if (calc.operation == Operations.NOTHING) return false
 
         val strings = input.split(calc.getStringOperation())
-        if (strings[1].isEmpty()) return false
 
-        calc.number2=strings[1].toDouble()
-        calc.number1=calc.calculate()
-        calc.operation=Operations.NOTHING
-        calc.number2=0.0
+        val number1: Double
+        val number2: Double
+        if (strings.size>2){
+            if (strings[1].isEmpty()) return false
+            if (strings[2].isEmpty()) return false
+            number1=("-"+strings[1]).toDouble()
+            number2=strings[2].toDouble()
+        } else {
+            if (strings[0].isEmpty()) return false
+            if (strings[1].isEmpty()) return false
+            number1=strings[0].toDouble()
+            number2=strings[1].toDouble()
+        }
 
+        calc.calculateAndRefreshCurrentInput(number1,number2)
         return true
     }
 

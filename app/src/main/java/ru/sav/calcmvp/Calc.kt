@@ -1,20 +1,22 @@
 package ru.sav.calcmvp
-//test
+
 class Calc() {
-    var number1: Double = 0.0
-        set(value) {
-            field = value
-            changeCurrentInput()
-        }
-    var number2: Double = 0.0
+    var currentInput: String = "0"
     var operation: Operations = Operations.NOTHING
         set(value) {
-            field = value
-            changeCurrentInput()
-        }
-    var currentInput: String = "0"
+            var number1String = currentInput
+            if (operation !== Operations.NOTHING) {
+                val lastChar=currentInput.last()
+                if ((lastChar=='+')||(lastChar=='-')||(lastChar=='*')||(lastChar=='/')) {
+                    number1String = currentInput.substring(0, currentInput.length - 1)
+                }
+            }
 
-    fun calculate(): Double = when (operation) {
+            field = value
+            currentInput = number1String+getStringOperation()
+        }
+
+    private fun calculate(number1: Double, number2: Double): Double = when (operation) {
         Operations.PLUS -> number1 + number2
         Operations.MINUS -> number1 - number2
         Operations.DIVISION -> number1 / number2
@@ -22,18 +24,21 @@ class Calc() {
         else -> 0.0
     }
 
-    private fun getNumber1String(): String {
-        val strings = number1.toString().split(".")
-        if (strings[1].toDouble()==0.0) {
-            return strings[0]
+    private fun doubleToString(number: Double):String{
+        val strings = number.toString().split(".")
+        return if (strings[1].toDouble()==0.0) {
+            strings[0]
         } else {
-            return number1.toString()
+            number.toString()
         }
     }
 
+    fun calculateAndRefreshCurrentInput(number1: Double, number2: Double){
+        currentInput = doubleToString(calculate(number1,number2))
+        operation = Operations.NOTHING
+    }
+
     fun clear(){
-        number1 = 0.0
-        number2 = 0.0
         operation = Operations.NOTHING
         currentInput = "0"
     }
@@ -46,9 +51,5 @@ class Calc() {
             Operations.MULTIPLY -> "*"
             else -> ""
         }
-    }
-
-    private fun changeCurrentInput(){
-        currentInput=getNumber1String()+getStringOperation()
     }
 }
