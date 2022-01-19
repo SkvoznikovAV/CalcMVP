@@ -2,6 +2,7 @@ package ru.sav.calcmvp
 
 class Calc() {
     var currentInput: String = "0"
+        private set
     var operation: Operations = Operations.NOTHING
         set(value) {
             var number1String = currentInput
@@ -41,6 +42,26 @@ class Calc() {
     fun clear(){
         operation = Operations.NOTHING
         currentInput = "0"
+    }
+
+    fun delFromCurrentInput(): Boolean {
+        return if (currentInput.isNotEmpty()) {
+            val lastChar = currentInput.last()
+            if ((lastChar == '+') || (lastChar == '-') || (lastChar == '*') || (lastChar == '/')) {
+                operation = Operations.NOTHING
+            } else {
+                currentInput = currentInput.substring(0, currentInput.length - 1)
+            }
+
+            if (currentInput.isEmpty()) currentInput = "0"
+            true
+        } else false
+    }
+
+    fun addNumberToCurrentInput(number: Int){
+        if (currentInput=="0") currentInput = ""
+
+        currentInput += number.toString()
     }
 
     fun getStringOperation():String {

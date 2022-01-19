@@ -3,9 +3,7 @@ package ru.sav.calcmvp
 class CalcPresenter(private val calcView: CalcView, private var calc: Calc) {
 
     fun numberPressed(number: Int){
-        if (calc.currentInput=="0") calc.currentInput = ""
-
-        calc.currentInput += number.toString()
+        calc.addNumberToCurrentInput(number)
         showCurrentInput()
     }
 
@@ -19,15 +17,7 @@ class CalcPresenter(private val calcView: CalcView, private var calc: Calc) {
     }
 
     fun delPressed(){
-        if (calc.currentInput.isNotEmpty()) {
-            val lastChar=calc.currentInput.last()
-            if ((lastChar=='+')||(lastChar=='-')||(lastChar=='*')||(lastChar=='/')) {
-                calc.operation=Operations.NOTHING
-            } else{
-                calc.currentInput = calc.currentInput.substring(0,calc.currentInput.length-1)
-            }
-
-            if (calc.currentInput.isEmpty()) calc.currentInput = "0"
+        if (calc.delFromCurrentInput()) {
             showCurrentInput()
         }
     }
