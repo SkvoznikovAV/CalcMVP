@@ -1,6 +1,6 @@
 package ru.sav.calcmvp
 
-class Calc() {
+class Calc {
     var currentInput: String = "0"
         private set
     var operation: Operations = Operations.NOTHING
@@ -34,9 +34,29 @@ class Calc() {
         }
     }
 
-    fun calculateAndRefreshCurrentInput(number1: Double, number2: Double){
+    fun calculateAndRefreshCurrentInput(): Boolean{
+        if (operation == Operations.NOTHING) return false
+
+        val strings = currentInput.split(getStringOperation())
+
+        val number1: Double
+        val number2: Double
+        if (strings.size>2){
+            if (strings[1].isEmpty()) return false
+            if (strings[2].isEmpty()) return false
+            number1=("-"+strings[1]).toDouble()
+            number2=strings[2].toDouble()
+        } else {
+            if (strings[0].isEmpty()) return false
+            if (strings[1].isEmpty()) return false
+            number1=strings[0].toDouble()
+            number2=strings[1].toDouble()
+        }
+
         currentInput = doubleToString(calculate(number1,number2))
         operation = Operations.NOTHING
+
+        return true
     }
 
     fun clear(){
@@ -64,7 +84,7 @@ class Calc() {
         currentInput += number.toString()
     }
 
-    fun getStringOperation():String {
+    private fun getStringOperation():String {
         return when (operation){
             Operations.PLUS -> "+"
             Operations.MINUS -> "-"
