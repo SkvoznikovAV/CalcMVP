@@ -23,37 +23,31 @@ class CalcPresenter(private val calcView: CalcView, private var calc: Calc) {
     }
 
     fun dotPressed(){
-        var checkString=calc.currentInput
-        if (calc.operation !== Operations.NOTHING) {
-            checkString = checkString.split(calc.getStringOperation())[1]
-        }
-
-        if (!checkString.contains(".")){
-            calc.currentInput= "${calc.currentInput}."
+        if (calc.addDotToCurrentInput()){
             showCurrentInput()
         }
     }
 
-    private fun operationPressed(input: String, operation: Operations){
-        calculate(input)
+    private fun operationPressed(operation: Operations){
+        calculate(calc.currentInput)
         calc.operation = operation
         showCurrentInput()
     }
 
     fun plusPressed(){
-        operationPressed(calc.currentInput,Operations.PLUS)
+        operationPressed(Operations.PLUS)
     }
 
     fun minusPressed(){
-        operationPressed(calc.currentInput,Operations.MINUS)
+        operationPressed(Operations.MINUS)
     }
 
     fun divisionPressed(){
-        operationPressed(calc.currentInput,Operations.DIVISION)
+        operationPressed(Operations.DIVISION)
     }
 
     fun multiplyPressed(){
-        operationPressed(calc.currentInput,Operations.MULTIPLY)
+        operationPressed(Operations.MULTIPLY)
     }
 
     private fun calculate(input: String): Boolean {

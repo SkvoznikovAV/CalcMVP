@@ -73,4 +73,18 @@ class Calc() {
             else -> ""
         }
     }
+
+    fun addDotToCurrentInput(): Boolean{
+        var checkString=currentInput
+        if (operation !== Operations.NOTHING) {
+            checkString = checkString.split(getStringOperation())[1]
+        }
+
+        if (!checkString.contains(".")){
+            currentInput= "${currentInput}."
+            return true
+        }
+
+        return false
+    }
 }
