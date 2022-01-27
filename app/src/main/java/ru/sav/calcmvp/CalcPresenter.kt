@@ -2,6 +2,14 @@ package ru.sav.calcmvp
 
 class CalcPresenter(private val calcView: CalcView, private var calc: Calc) {
 
+    fun updateCalc(c: Calc){
+        calc = c
+    }
+
+    fun refreshView(){
+        showCurrentInput()
+    }
+
     fun numberPressed(number: Int){
         calc.addNumberToCurrentInput(number)
         showCurrentInput()
@@ -55,5 +63,4 @@ class CalcPresenter(private val calcView: CalcView, private var calc: Calc) {
             showCurrentInput()
         }
     }
-
 }

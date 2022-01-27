@@ -2,6 +2,8 @@ package ru.sav.calcmvp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.util.Log
 import ru.sav.calcmvp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), CalcView {
@@ -44,5 +46,18 @@ class MainActivity : AppCompatActivity(), CalcView {
 
     override fun showCurrentInput(currentInput: String) {
         vb.tvInput.text = currentInput
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(Calc.KEY_CLASS, calc)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        calc = savedInstanceState.getSerializable(Calc.KEY_CLASS) as Calc
+        presenter.updateCalc(calc)
+        presenter.refreshView()
     }
 }

@@ -1,6 +1,8 @@
 package ru.sav.calcmvp
 
-class Calc {
+import java.io.Serializable
+
+class Calc: Serializable {
     var currentInput: String = "0"
         private set
     var operation: Operations = Operations.NOTHING
@@ -106,5 +108,10 @@ class Calc {
         }
 
         return false
+    }
+
+    companion object {
+        const val KEY_CLASS = "CALC"
+
     }
 }
